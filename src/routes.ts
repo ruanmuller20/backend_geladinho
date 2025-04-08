@@ -24,4 +24,6 @@ router.post("/createfav", AuthMiddlewares, favController.store);
 router.get("/favoritos", AuthMiddlewares, favController.index);
 router.get("/favoritos2", AuthMiddlewares, favController.listarFavoritos);
 
+router.delete("deletefav/:id", AuthMiddlewares, favController.deleteFavorito);
+
 

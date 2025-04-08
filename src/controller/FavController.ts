@@ -51,4 +51,32 @@ export class FavController {
             return res.status(500).json({ error: "Erro ao listar favoritos" });
         }
     }
+
+    async deleteFavorito(req: Request, res: Response) {
+        const { id } = req.params;
+        const userId = parseInt(req.userId); // Obtém o userId do token JWT
+
+        try {
+            const favoritoId = parseInt(id);
+
+            const favorito = await prisma.favorite.findUnique({
+                where: { id: favoritoId },
+            });
+
+            
+            if (!favorito || favorito.userId !== userId) {
+                return res.status(403).json({ error: "Acesso negado ou favorito não encontrado" });
+            }
+
+            await prisma.favorite.delete({
+                where: { id: favoritoId },
+            });
+
+            return res.json({ message: "Favorito deletado com sucesso" });
+        } catch (error) {
+            console.error("Erro ao deletar favorito:", error);
+            return res.status(500).json({ error: "Erro ao deletar favorito" });
+        }
+
+    }
 }
